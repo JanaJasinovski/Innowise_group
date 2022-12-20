@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new NotFoundException("User not found [email: " + email + "]")
+                        new NotFoundException("User not found " + email)
                 );
 
         return UserPrincipal.create(user);
@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("User not found [id: " + id + "]")
+                () -> new NotFoundException("User not found: " + id)
         );
 
         return UserPrincipal.create(user);

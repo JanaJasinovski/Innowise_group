@@ -38,7 +38,7 @@ public class User implements Serializable {
     @Size(max = 100)
     private String password;
 
-    public User(@NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password) {
+    public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
