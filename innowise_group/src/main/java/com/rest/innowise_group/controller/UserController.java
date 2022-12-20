@@ -4,7 +4,6 @@ import com.rest.innowise_group.dto.JwtAuthenticationResponse;
 import com.rest.innowise_group.dto.UserDto;
 import com.rest.innowise_group.model.User;
 import com.rest.innowise_group.service.UserService;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +15,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/users")
-@Api(tags = "users")
 public class UserController {
 
     private UserService userService;
