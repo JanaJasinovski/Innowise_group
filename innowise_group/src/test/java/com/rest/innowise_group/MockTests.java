@@ -1,19 +1,17 @@
 package com.rest.innowise_group;
 
 import com.rest.innowise_group.dto.ErrorDto;
-import com.rest.innowise_group.dto.UserDto;
 import com.rest.innowise_group.model.User;
 import com.rest.innowise_group.repository.UserRepository;
 import com.rest.innowise_group.service.UserService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -23,14 +21,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 @AutoConfigureMockMvc
 public class MockTests {
 
     List<User> users = new ArrayList<>();
-    List<UserDto> userDto = new ArrayList<>();
 
     @Autowired
     public UserService userService;
@@ -38,18 +34,15 @@ public class MockTests {
     @MockBean
     private UserRepository userRepository;
 
-    @MockBean
-    private PasswordEncoder passwordEncoder;
-
-    @Test
+    @BeforeEach
     void saveUserTest() {
         when(this.userRepository.findAll()).thenReturn(this.users);
-        when(this.userRepository.findByEmail(anyString())).thenAnswer(invocation ->
+        when(this.userRepository.getByEmail(anyString())).thenAnswer(invocation ->
                 this.users.stream().filter(user ->
                         user.getEmail().equals(invocation.getArgument(0))).findFirst());
         when(this.userRepository.save(any(User.class))).thenAnswer(invocation -> {
             final User saveUser = invocation.getArgument(0);
-            saveUser.setId((long)this.users.size());
+            saveUser.setId((long) this.users.size());
             this.users.add(saveUser);
             return invocation.getArgument(0);
         });
@@ -71,7 +64,5 @@ public class MockTests {
                     Assertions.assertNotNull(user.getPassword());
                 });
     }
-
-
 
 }
