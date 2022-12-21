@@ -1,5 +1,6 @@
 package com.rest.innowise_group;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rest.innowise_group.dto.ErrorDto;
 import com.rest.innowise_group.exception.EmailDuplicateException;
 import com.rest.innowise_group.model.User;
@@ -14,7 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +35,9 @@ import static org.mockito.Mockito.when;
 public class MockTests {
 
     List<User> users = new ArrayList<>();
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Autowired
     public UserService userService;
@@ -71,6 +80,24 @@ public class MockTests {
     void EmailDuplicateExceptionTest() {
         EmailDuplicateException cause = Mockito.mock(EmailDuplicateException.class);
         when(cause.getCause()).thenReturn(cause);
+    }
+
+    @Test
+    void saveTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users/credentials")
+                        .content(asJsonString(new User("losha", "34345345")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.getId").exists());
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

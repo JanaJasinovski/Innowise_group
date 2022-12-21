@@ -41,4 +41,9 @@ public class UserController {
     public ResponseEntity<?> getEmailByToken() {
         return new ResponseEntity<>(userService.getEmailsIfTokensEquals(), OK);
     }
+
+    @GetMapping(value = "/getAll")
+    public List<User> getAllEmployees() {
+        return userService.getAll();
+    }
 }
