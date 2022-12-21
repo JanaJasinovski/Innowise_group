@@ -26,9 +26,9 @@ class InnowiseGroupApplicationTests {
 
     @Test
     void saveUserTest() {
-        User user1 = new User("kate@gmail.com", "123456789");
+        User user1 = new User("anton@gmail.com", "123456789");
         userService.saveUser(user1);
-        Assertions.assertEquals("kate@gmail.com", user1.getEmail());
+        Assertions.assertEquals("anton@gmail.com", user1.getEmail());
         User user2 = new User("pavel@gmail.com", "123456789");
         userService.saveUser(user2);
         Assertions.assertEquals("pavel@gmail.com", user2.getEmail());
@@ -41,8 +41,8 @@ class InnowiseGroupApplicationTests {
     @Test
     void checkUserTest() {
         User user1 = new User("jana@gmail.com", "2301003120701");
-		Assertions.assertEquals("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjcxNDczMjQ0LCJleHAiOjE2NzIwNzgwNDR9.ncffhbovQf0M1tzoeXgwr10l_Apb7DKqghHkWxo2vM_GiYj7C1nAEsnpi6stCd80Em3Zva35QAzJifa8z9OnZQ", jwtInterface.generateToken(user1));
-        User user2 = new User("denis@gmail.com", "123456789");
+		Assertions.assertEquals("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbnRvbkBnbWFpbC5jb20iLCJpYXQiOjE2NzE2MTU1NDV9.GN1unKxselUanzwIWEdSuWLJoAtFsScUUjrt_zsMyr0", jwtInterface.generateToken(user1));
+        User user2 = new User("pavel@gmail.com", "123456789");
 		Assertions.assertEquals("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjcxNDcyOTMwLCJleHAiOjE2NzIwNzc3MzB9._iD44u7_v4mTF4v8aNzG1kSHVIBfe_0RZ0iQSW6Z5UP2Qd-SdN4DkPQoFpkMOvoCaacHfisOZx596d-XRWp2pA", jwtInterface.generateToken(user2));
         User user3 = new User("yulia@gmail.com", "123456789");
 		Assertions.assertEquals("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNjcxNDczMDI1LCJleHAiOjE2NzIwNzc4MjV9.A3PYFip7mBO1E28fjiq79ZGmE2h2huBSalGxyUMoG1ZNDYJ5jrIkRIBQdqcbZ0sobsdiNBfUCN5y0Z5oLYog4A", jwtInterface.generateToken(user3));
@@ -60,16 +60,11 @@ class InnowiseGroupApplicationTests {
 
     @Test
     void getEmailByTokenTest() {
-        List<User> userDtos = new ArrayList<>();
         User user1 = new User("kate@gmail.com", "123456789");
         User user2 = new User("pavel@gmail.com", "123456789");
         User user3 = new User("masha@gmail.com", "123456789");
-        userDtos.add(user1);
-        userDtos.add(user2);
-        userDtos.add(user3);
+        List<String> usersEmail =  new ArrayList(Arrays.asList(user1.getEmail(), user2.getEmail(), user3.getEmail()));
 
-        List<String> users =  new ArrayList(Arrays.asList(user1.getEmail(), user2.getEmail(), user3.getEmail()));
-
-        Assertions.assertEquals(users, userService.getEmailsIfTokensEquals(userDtos));
+        Assertions.assertEquals(usersEmail, userService.getEmailsIfTokensEquals());
     }
 }

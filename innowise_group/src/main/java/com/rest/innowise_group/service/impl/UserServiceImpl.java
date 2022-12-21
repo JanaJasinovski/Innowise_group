@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,15 +39,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<String> getEmailsIfTokensEquals(List<User> users) {
+    public List<String> getEmailsIfTokensEquals() {
         List<String> emails = new ArrayList<>();
-        for (User user : users) {
+        for (User user : getAll()) {
             if (user.getEmail().equals(jwtInterface.getUserEmailFromJwtToken(jwtSecret))) {
                 emails.add(user.getEmail());
-                return emails;
             }
         }
-        return null;
+        return emails;
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
 }

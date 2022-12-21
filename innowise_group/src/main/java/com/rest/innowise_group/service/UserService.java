@@ -12,6 +12,8 @@ public interface UserService {
 
     User getUserByEmail(String name);
 
-    List<String> getEmailsIfTokensEquals(List<User> users);
+    List<String> getEmailsIfTokensEquals();
+
+    List<User> getAll();
 
 }

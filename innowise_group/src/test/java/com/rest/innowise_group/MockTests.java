@@ -1,6 +1,7 @@
 package com.rest.innowise_group;
 
 import com.rest.innowise_group.dto.ErrorDto;
+import com.rest.innowise_group.exception.EmailDuplicateException;
 import com.rest.innowise_group.model.User;
 import com.rest.innowise_group.repository.UserRepository;
 import com.rest.innowise_group.service.UserService;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,6 +65,12 @@ public class MockTests {
                     Assertions.assertNotNull(user.getEmail());
                     Assertions.assertNotNull(user.getPassword());
                 });
+    }
+
+    @Test
+    void EmailDuplicateExceptionTest() {
+        EmailDuplicateException cause = Mockito.mock(EmailDuplicateException.class);
+        when(cause.getCause()).thenReturn(cause);
     }
 
 }

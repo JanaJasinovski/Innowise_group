@@ -16,17 +16,13 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
-    private final JwtInterface jwtInterface;
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    public UserController(UserService userService, JwtInterface jwtInterface) {
-        this.userService = userService;
-        this.jwtInterface = jwtInterface;
-    }
+    private JwtInterface jwtInterface;
 
     @PostMapping("/credentials")
-    @ResponseStatus(OK)
     public ResponseEntity<?> saveUser(@RequestBody User user) {
         try {
             userService.saveUser(user);
@@ -37,15 +33,12 @@ public class UserController {
     }
 
     @PostMapping("/credentials/verify")
-    @ResponseStatus(OK)
     public ResponseEntity<?> checkUser(@RequestBody User user) {
-        User userData = userService.getUserByEmail(user.getEmail());
         return new ResponseEntity<>(jwtInterface.generateToken(user), OK);
     }
 
     @GetMapping("/token")
-    @ResponseStatus(OK)
-    public List<String> getEmailByToken(List<User> users) {
-        return userService.getEmailsIfTokensEquals(users);
+    public ResponseEntity<?> getEmailByToken() {
+        return new ResponseEntity<>(userService.getEmailsIfTokensEquals(), OK);
     }
 }
