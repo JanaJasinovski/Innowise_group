@@ -1,5 +1,7 @@
 package com.rest.innowise_group.controller;
 
+import com.rest.innowise_group.exception.EmailDuplicateException;
+import com.rest.innowise_group.exception.ServerErrorException;
 import com.rest.innowise_group.model.User;
 import com.rest.innowise_group.service.JwtInterface;
 import com.rest.innowise_group.service.UserService;
@@ -27,19 +29,34 @@ public class UserController {
         try {
             userService.saveUser(user);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (EmailDuplicateException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        } catch (ServerErrorException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/credentials/verify")
     public ResponseEntity<?> checkUser(@RequestBody User user) {
-        return new ResponseEntity<>(jwtInterface.generateToken(user), OK);
+        jwtInterface.generateToken(user);
+        try {
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (EmailDuplicateException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        } catch (ServerErrorException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/token")
     public ResponseEntity<?> getEmailByToken() {
-        return new ResponseEntity<>(userService.getEmailsIfTokensEquals(), OK);
+        try {
+            return new ResponseEntity<>(userService.getEmailsIfTokensEquals(), OK);
+        } catch (EmailDuplicateException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        } catch (ServerErrorException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(value = "/getAll")
