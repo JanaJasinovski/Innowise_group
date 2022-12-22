@@ -1,12 +1,9 @@
 package com.rest.innowise_group.services;
 
-import com.rest.innowise_group.exception.EmailDuplicateException;
 import com.rest.innowise_group.model.User;
 import com.rest.innowise_group.repository.UserRepository;
-import com.rest.innowise_group.service.UserService;
 import com.rest.innowise_group.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 class UserServiceTest {
@@ -43,19 +40,6 @@ class UserServiceTest {
 
         verify(userRepository).save(any(User.class));
 
-    }
-
-    @Test
-    void shouldThrowErrorWhenSaveUserWithExistingEmail() {
-        final User user = new User( "jantschick@gmail.com","2301003120701");
-
-        given(userRepository.getByEmail(user.getEmail())).willReturn(null);
-
-        assertThrows(EmailDuplicateException.class,() -> {
-            userService.saveUser(user);
-        });
-
-        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test

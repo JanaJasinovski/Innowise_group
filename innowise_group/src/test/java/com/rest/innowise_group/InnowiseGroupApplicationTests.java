@@ -1,11 +1,10 @@
 package com.rest.innowise_group;
 
 import com.rest.innowise_group.model.User;
-import com.rest.innowise_group.service.UserService;
+import com.rest.innowise_group.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,9 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 class InnowiseGroupApplicationTests {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
-    @ParameterizedTest
+    @Test
     void saveUserTest() {
         User user1 = new User("anton@gmail.com", "123456789");
         boolean isuser1 = userService.saveUser(user1);
