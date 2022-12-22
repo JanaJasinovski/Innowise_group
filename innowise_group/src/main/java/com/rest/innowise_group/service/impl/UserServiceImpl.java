@@ -1,36 +1,48 @@
 package com.rest.innowise_group.service.impl;
 
 import com.rest.innowise_group.model.User;
+import com.rest.innowise_group.model.UserRequest;
+import com.rest.innowise_group.model.UserResponse;
+import com.rest.innowise_group.model.UserUtils;
 import com.rest.innowise_group.repository.UserRepository;
-import com.rest.innowise_group.service.JwtInterface;
 import com.rest.innowise_group.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Value("${app.jwtSecret}")
-    private String jwtSecret;
+    @Value("${app.token}")
+    private String token;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserUtils userUtils;
 
-    private JwtInterface jwtInterface;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, JwtInterface jwtInterface) {
-        this.userRepository = userRepository;
-        this.jwtInterface = jwtInterface;
+    @Override
+    public boolean saveUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return false;
+        }
+        userRepository.save(user);
+        return true;
     }
 
     @Override
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public UserResponse isUserExist(UserRequest userRequest) {
+        Optional<User> user = Optional.ofNullable(userRepository.getByEmail(userRequest.getEmail()));
+        UserResponse userResponse = null;
+
+        if (user.isPresent() && user.get().getPassword().equals(userRequest.getPassword())) {
+            userResponse = userUtils.makeUserResponse(user, userRequest);
+        }
+        return userResponse;
     }
 
     @Override
@@ -39,13 +51,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<String> getEmailsIfTokensEquals() {
+    public List<String> getEmailsIfTokensEquals(String tokenRequest) {
         List<String> emails = new ArrayList<>();
-        for (User user : getAll()) {
-            if (user.getEmail().equals(jwtInterface.getUserEmailFromJwtToken(jwtSecret))) {
+        if (tokenRequest.equals(token)) {
+            for (User user : getAll()) {
                 emails.add(user.getEmail());
             }
         }
+
         return emails;
     }
 

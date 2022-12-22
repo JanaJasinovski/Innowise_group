@@ -1,6 +1,8 @@
 package com.rest.innowise_group.service;
 
 import com.rest.innowise_group.model.User;
+import com.rest.innowise_group.model.UserRequest;
+import com.rest.innowise_group.model.UserResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,11 +10,13 @@ import java.util.List;
 @Service
 public interface UserService {
 
-    void saveUser(User user);
+    boolean saveUser(User user);
 
     User getUserByEmail(String name);
 
-    List<String> getEmailsIfTokensEquals();
+    UserResponse isUserExist(UserRequest userRequest);
+
+    List<String> getEmailsIfTokensEquals(String tokenRequest);
 
     List<User> getAll();
 
