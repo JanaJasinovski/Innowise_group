@@ -1,5 +1,6 @@
 package com.rest.innowise_group.service.impl;
 
+import com.rest.innowise_group.exception.EmailDuplicateException;
 import com.rest.innowise_group.model.User;
 import com.rest.innowise_group.model.UserRequest;
 import com.rest.innowise_group.model.UserResponse;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean saveUser(User user) {
+    public boolean saveUser(User user) throws EmailDuplicateException {
         if (userRepository.existsByEmail(user.getEmail())) {
             return false;
         }

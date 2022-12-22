@@ -47,7 +47,7 @@ class UserServiceTest {
 
     @Test
     void shouldThrowErrorWhenSaveUserWithExistingEmail() {
-        final User user = new User( "wergerg@mail.com","23234234");
+        final User user = new User( "jantschick@gmail.com","2301003120701");
 
         given(userRepository.getByEmail(user.getEmail())).willReturn(null);
 
