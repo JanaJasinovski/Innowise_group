@@ -4,10 +4,12 @@ import com.rest.innowise_group.exception.EmailDuplicateException;
 import com.rest.innowise_group.model.User;
 import com.rest.innowise_group.repository.UserRepository;
 import com.rest.innowise_group.service.UserService;
+import com.rest.innowise_group.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +21,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Test
     void shouldSavedUserSuccessFully() {

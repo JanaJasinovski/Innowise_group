@@ -5,26 +5,28 @@ import com.rest.innowise_group.service.UserService;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @AllArgsConstructor
 class InnowiseGroupApplicationTests {
 
+    @Autowired
     private UserService userService;
 
-
-    @Test
+    @ParameterizedTest
     void saveUserTest() {
         User user1 = new User("anton@gmail.com", "123456789");
-        userService.saveUser(user1);
-        Assertions.assertEquals("anton@gmail.com", user1.getEmail());
+        boolean isuser1 = userService.saveUser(user1);
+        Assertions.assertTrue(isuser1);
         User user2 = new User("pavel@gmail.com", "123456789");
-        userService.saveUser(user2);
-        Assertions.assertEquals("pavel@gmail.com", user2.getEmail());
+        boolean isuser2 = userService.saveUser(user2);
+        Assertions.assertTrue(isuser2);
         User user3 = new User("masha@gmail.com", "123456789");
-        userService.saveUser(user3);
-        Assertions.assertEquals("masha@gmail.com", user3.getEmail());
+        boolean isuser3 = userService.saveUser(user3);
+        Assertions.assertTrue(isuser3);
     }
 
     @Test
