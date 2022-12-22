@@ -23,4 +23,13 @@ public class UserService {
         Assertions.assertTrue(isUser2);
     }
 
+    @Test
+    void getUserByEmail() {
+        User user1 = new User("gleb@gmail.com", "323424");
+        User user2 = new User("natasha@gmail.com", "24234234");
+        Assertions.assertEquals(user1, userService.getUserByEmail("gleb@gmail.com"));
+        Assertions.assertEquals(user2, userService.getUserByEmail("natasha@gmail.com"));
+
+    }
+
 }
